@@ -57,7 +57,6 @@ namespace KillmailUnfucker
 
         protected bool IsAndFixedKillmail(ref string txt)
         {
-
             // High speec check for killmail characteristics
             foreach (string characteristic in killmailCharacteristics)
             {
@@ -66,6 +65,7 @@ namespace KillmailUnfucker
             }
 
             // Go through each line
+            bool hasFixed = false;
             string[] lines = txt.Split('\n');
             for (int i = 0; i < lines.Length; i++)
             {
@@ -74,12 +74,15 @@ namespace KillmailUnfucker
                 {
                     // This is already unfucked if it doesnt have a comma
                     if (!lines[i].Contains(","))
-                        return false;
+                        continue;
 
                     // Fix this line
                     lines[i] = lines[i].Replace(',', '.');
+                    hasFixed = true;
                 }
             }
+            if (!hasFixed)
+                return false;
 
             // Reassemble as one line
             txt = string.Join("\n", lines);
